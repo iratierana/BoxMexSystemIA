@@ -86,7 +86,9 @@ public class Espacio {
 				if (espacio[i][j]!=1 && espacio[i][j]!=4){
 					Punto newPunto = new Punto (i,j);
 					if (!punto.equals(newPunto)){
-						adyacentes.add( new Nodo( newPunto,0, nodo.getRecorrido()+1));
+						if ((coordenadaX == newPunto.getCoordenadaX()) || (coordenadaY == newPunto.getCoordenadaY())){
+							adyacentes.add( new Nodo(newPunto, 0, nodo.getRecorrido()+1));
+						}
 					}
 				}
 			}
@@ -102,7 +104,7 @@ public class Espacio {
 			List<Nodo> nodos = ruta.getListaNodos();
 			for (Nodo nodo : nodos){
 				Punto posicion = nodo.getPunto();
-				espacio[posicion.coordenadaX][posicion.coordenadaY]=8;
+				espacio[posicion.coordenadaX][posicion.coordenadaY] = 8;
 			}
 		}
 		

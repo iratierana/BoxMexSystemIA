@@ -8,8 +8,8 @@ public class Principal {
 	
 	public Principal(){
 		espacio = new Espacio();
-		espacio.setOrigen(new Punto(1,1));
-		espacio.setDestino(new Punto (6,5));
+		espacio.setOrigen(new Punto(2,3));
+		espacio.setDestino(new Punto (6,7));
 		buscador = new BuscadorCaminoMasCorto(espacio);
 	}
 	public void buscarCaminoMasCorto(){
