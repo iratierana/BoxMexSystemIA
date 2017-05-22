@@ -36,6 +36,30 @@ public class WebServiceClients {
 	}
 	
 	//paketia jaso en json	
+	public static String paketiaJasoZerbitzaritik(){
+		String respuesta = null;
+		Client client = null;	
+		
+		try {
+			client = Client.create();
+			WebResource webResource = client.resource(
+					"http://localhost:8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
+					);
+			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+			
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			}			
+			
+			respuesta = response.getEntity(String.class);
 	
-	
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			client.destroy();
+		}	
+		return respuesta;
+	}
+		
 }
