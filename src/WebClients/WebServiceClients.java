@@ -9,7 +9,7 @@ import com.sun.jersey.api.client.WebResource;
 public class WebServiceClients {
 	
 	//ia bai edo ez
-	public boolean iaAktibatutaEdoEz(){
+	public static boolean iaAktibatutaEdoEz(){
 		String respuesta = null;
 		Client client = null;	
 		
