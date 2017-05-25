@@ -15,28 +15,28 @@ public class Espacio {
 	final int VALORESTANTERIA = 4;
 	final int VALORRECOCIDA = 5;
 	final int DIMENSION = 9;
-	
-	int espacio [][];
+
+	int espacio[][];
 	Punto origen, destino;
-	
-	public Espacio(){
-		espacio = new int [DIMENSION] [DIMENSION];
+
+	public Espacio() {
+		espacio = new int[DIMENSION][DIMENSION];
 		leerEspacioFichero();
-		
+
 	}
 
 	private void leerEspacioFichero() {
-		try(BufferedReader in = new BufferedReader (new FileReader(NOMBREFICHERO))){
+		try (BufferedReader in = new BufferedReader(new FileReader(NOMBREFICHERO))) {
 			String linea;
 			int fila = 0;
-			while((linea = in.readLine())!=null){
+			while ((linea = in.readLine()) != null) {
 				String valores[] = linea.split("[ ]");
-				for (int i = 0; i<valores.length; i++){
-					espacio [fila][i] = Integer.valueOf(valores[i]);
+				for (int i = 0; i < valores.length; i++) {
+					espacio[fila][i] = Integer.valueOf(valores[i]);
 				}
 				fila++;
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,16 +44,19 @@ public class Espacio {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	public void setOrigen(Punto p){
+
+	public void setOrigen(Punto p) {
 		origen = p;
-		espacio [origen.coordenadaX][origen.coordenadaY] = VALORORIGEN;
+		espacio[origen.coordenadaX][origen.coordenadaY] = VALORORIGEN;
 	}
-	public void setDestino(Punto p){
+
+	public void setDestino(Punto p) {
 		destino = p;
-		espacio [destino.coordenadaX][destino.coordenadaY] = VALORDESTINO;
+		espacio[destino.coordenadaX][destino.coordenadaY] = VALORDESTINO;
 	}
+
 	public Punto getOrigen() {
 		return origen;
 	}
@@ -62,10 +65,10 @@ public class Espacio {
 		return destino;
 	}
 
-	public void verEspacio(){
-		for (int i = 0; i<DIMENSION; i++){
-			for (int j = 0; j <DIMENSION; j++){
-				System.out.print(espacio [i][j]+" ");
+	public void verEspacio() {
+		for (int i = 0; i < DIMENSION; i++) {
+			for (int j = 0; j < DIMENSION; j++) {
+				System.out.print(espacio[i][j] + " ");
 			}
 			System.out.println();
 		}
@@ -76,38 +79,153 @@ public class Espacio {
 		Punto punto = nodo.getPunto();
 		int coordenadaX = punto.getCoordenadaX();
 		int coordenadaY = punto.getCoordenadaY();
-		int limiteInferiorX = (coordenadaX==0)?0:coordenadaX-1;
-		int limiteSuperiorX = (coordenadaX==DIMENSION-1)?DIMENSION-1:coordenadaX+1;
-		int limiteInferiorY = (coordenadaY==0)?0:coordenadaY-1;
-		int limiteSuperiorY = (coordenadaY==DIMENSION-1)?DIMENSION-1:coordenadaY+1;
-		
-		for (int i = limiteInferiorX; i<=limiteSuperiorX;i++){
-			for (int j = limiteInferiorY; j<=limiteSuperiorY; j++){
-				if (espacio[i][j]!=1 && espacio[i][j]!=4){
-					Punto newPunto = new Punto (i,j);
-					if (!punto.equals(newPunto)){
-						if ((coordenadaX == newPunto.getCoordenadaX()) || (coordenadaY == newPunto.getCoordenadaY())){
-							adyacentes.add( new Nodo(newPunto, 0, nodo.getRecorrido()+1));
+		int limiteInferiorX = (coordenadaX == 0) ? 0 : coordenadaX - 1;
+		int limiteSuperiorX = (coordenadaX == DIMENSION - 1) ? DIMENSION - 1 : coordenadaX + 1;
+		int limiteInferiorY = (coordenadaY == 0) ? 0 : coordenadaY - 1;
+		int limiteSuperiorY = (coordenadaY == DIMENSION - 1) ? DIMENSION - 1 : coordenadaY + 1;
+
+		for (int i = limiteInferiorX; i <= limiteSuperiorX; i++) {
+			for (int j = limiteInferiorY; j <= limiteSuperiorY; j++) {
+				if (espacio[i][j] != 1 && espacio[i][j] != 4) {
+					Punto newPunto = new Punto(i, j);
+					if (!punto.equals(newPunto)) {
+						if ((coordenadaX == newPunto.getCoordenadaX()) || (coordenadaY == newPunto.getCoordenadaY())) {
+							adyacentes.add(new Nodo(newPunto, 0, nodo.getRecorrido() + 1));
 						}
 					}
 				}
 			}
 		}
-		
+
 		return adyacentes;
 	}
 
 	public void verRutaEnEspacio(Ruta ruta) {
-		if (ruta == null){
+		Principal principal = new Principal();
+		
+		if (ruta == null) {
 			System.out.println("No se ha encontrado camino");
-		}else{
+		} else {
 			List<Nodo> nodos = ruta.getListaNodos();
-			for (Nodo nodo : nodos){
+			for (Nodo nodo : nodos) {
 				Punto posicion = nodo.getPunto();
 				espacio[posicion.coordenadaX][posicion.coordenadaY] = 8;
+
+				String coordenadaX = String.valueOf(posicion.coordenadaX);
+				String coordenadaY = String.valueOf(posicion.coordenadaY);
+
+				String concatenado = coordenadaX + coordenadaY;
+
+				int resultado = Integer.parseInt(concatenado);
+
+				switch (resultado) {
+				case 11:
+					System.out.println("Estanteria 1");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(1)){
+							principal.product.remove(i);
+							System.out.println("Elemento 1 removido de robot");
+						}
+					}
+					
+					break;
+
+				case 25:
+					System.out.println("Estanteria 2");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(2)){
+							principal.product.remove(i);
+							System.out.println("Elemento 2 removido de robot");
+						}
+					}
+
+					break;
+
+					
+				case 27:
+					System.out.println("Estanteria 3");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(3)){
+							principal.product.remove(i);
+							System.out.println("Elemento 3 removido de robot");
+						}
+					}
+
+					break;
+					
+				case 43:
+					System.out.println("Estanteria 4");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(4)){
+							principal.product.remove(i);
+							System.out.println("Elemento 4 removido de robot");
+						}
+					}
+
+					break;
+					
+				case 45:
+					System.out.println("Estanteria 5");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(5)){
+							principal.product.remove(i);
+							System.out.println("Elemento 5 removido de robot");
+						}
+					}
+
+					break;
+					
+				case 47:
+					System.out.println("Estanteria 6");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(6)){
+							principal.product.remove(i);
+							System.out.println("Elemento 6 removido de robot");
+						}
+					}
+
+					break;
+					
+				case 63:
+					System.out.println("Estanteria 7");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(7)){
+							principal.product.remove(i);
+							System.out.println("Elemento 7 removido de robot");
+						}
+					}
+
+					break;
+					
+				case 65:
+					System.out.println("Estanteria 8");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(8)){
+							principal.product.remove(i);
+							System.out.println("Elemento 8 removido de robot");
+						}
+					}
+
+					break;
+					
+				case 67:
+					System.out.println("Estanteria 9");
+					for (int i = 0; i < principal.product.size(); i++) {
+						if(principal.product.get(i).equals(9)){
+							principal.product.remove(i);
+							System.out.println("Elemento 9 removido de robot");
+						}
+					}
+
+					break;
+					
+				default:
+					System.out.println("No existe ese punto de recogida" + resultado);
+					break;
+				}
 			}
 		}
-		
+
 		this.verEspacio();
 	}
 }

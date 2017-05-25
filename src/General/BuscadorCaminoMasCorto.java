@@ -32,10 +32,12 @@ public class BuscadorCaminoMasCorto {
 				rutaMasCorta = ruta;
 				break;
 			}
+			
 			List<Nodo> adyacentes = espacio.getNodosAdyacentes (nodo);
 			for (Nodo n : adyacentes){
 				n.setDistancia(this.manhattan(n.getPunto(), destino));
 			}
+			
 			listaRutas.addRutas(ruta,adyacentes);
 		}
 		
