@@ -42,7 +42,7 @@ public class Principal  implements Runnable{
 	
 	private void seleccionarRutaMasCorta() {
 		
-		
+				
 	}
 
 	public void crearRutaDeRutas () {
@@ -94,17 +94,17 @@ public class Principal  implements Runnable{
 	}
 	
 	public void inicializarEstanterias() {
-		estanterias.add(new Estanteria(2, 2, 2, 3, 1,  "Estanteria1", "patatas"));
-		estanterias.add(new Estanteria(2, 4, 2, 5, 2,  "Estanteria2", "tomates"));
-		estanterias.add(new Estanteria(2, 6, 2, 7, 3,  "Estanteria3", "lechugas"));
+		estanterias.add(new Estanteria(2, 2, 2, 3, 1,  "Estanteria1"));
+		estanterias.add(new Estanteria(2, 4, 2, 5, 2,  "Estanteria2"));
+		estanterias.add(new Estanteria(2, 6, 2, 7, 3,  "Estanteria3"));
 		
-		estanterias.add(new Estanteria(4, 2, 4, 3, 4, "Estanteria4", "almendras"));
-		estanterias.add(new Estanteria(4, 4, 4, 5, 5, "Estanteria5", "melocotones"));
-		estanterias.add(new Estanteria(4, 6, 4, 7, 6, "Estanteria6", "platanos"));
+		estanterias.add(new Estanteria(4, 2, 4, 3, 4, "Estanteria4"));
+		estanterias.add(new Estanteria(4, 4, 4, 5, 5, "Estanteria5"));
+		estanterias.add(new Estanteria(4, 6, 4, 7, 6, "Estanteria6"));
 		
-		estanterias.add(new Estanteria(6, 2, 6, 3, 7, "Estanteria7", "ajos"));
-		estanterias.add(new Estanteria(6, 4, 6, 5, 8, "Estanteria8", "pepinillos"));
-		estanterias.add(new Estanteria(6, 6, 6, 7, 9, "Estanteria9", "cacahuetes"));
+		estanterias.add(new Estanteria(6, 2, 6, 3, 7, "Estanteria7"));
+		estanterias.add(new Estanteria(6, 4, 6, 5, 8, "Estanteria8"));
+		estanterias.add(new Estanteria(6, 6, 6, 7, 9, "Estanteria9"));
 		
 	}
 	

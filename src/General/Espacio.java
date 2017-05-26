@@ -111,6 +111,7 @@ public class Espacio {
 				Punto posicion = nodo.getPunto();
 				espacio[posicion.coordenadaX][posicion.coordenadaY] = 8;
 
+				//HAU HEMEN EZ, GOIXEN HOBETO NIK USTE!!! aitor?
 				String coordenadaX = String.valueOf(posicion.coordenadaX);
 				String coordenadaY = String.valueOf(posicion.coordenadaY);
 
