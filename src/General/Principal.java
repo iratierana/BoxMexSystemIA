@@ -33,7 +33,7 @@ public class Principal  implements Runnable{
 		crearRutaDeRutas();
 		
 		for (int i = 0; i < rutaDeRutas.size(); i++){
-			distancias.add(calcularDistanciaDeCadaRuta(rutaDeRutas.get(i)));
+			distancias.add(calcularDistanciaDeCadaRuta(rutaDeRutas.get(i), i));
 		}
 		
 		seleccionarRutaMasCorta();
@@ -42,7 +42,13 @@ public class Principal  implements Runnable{
 	
 	private void seleccionarRutaMasCorta() {
 		
-				
+		int distanciaMenor = distancias.get(0);
+		
+		for (int i = 0; i < distancias.size(); i++) {
+			if(distanciaMenor > distancias.get(i)){
+				distanciaMenor = distancias.get(i);
+			}
+		}
 	}
 
 	public void crearRutaDeRutas () {
@@ -67,22 +73,30 @@ public class Principal  implements Runnable{
 	}
 	
 	public int factorial(int number) {
-        if (number <= 1)
+        if (number <= 1){
             return 1;
-        else
+        }else{
             return number * factorial(number - 1);
+        }
     }
 	
-	public int calcularDistanciaDeCadaRuta(ArrayList<Integer> ruta) {
-		/* Calcular la distancia para recorrer el arraylist en ese orden */
+	public int calcularDistanciaDeCadaRuta(ArrayList<Integer> ruta, int numeroRuta) {
+				
+		int estanteriaActual;
+		int getX;
+		int getY;
 		
-		espacio.setOrigen(puntosParada.get(posicion));
-		
-		espacio.setOrigen(new Punto(2,3));
-		espacio.setDestino(new Punto (6,7));
-		buscador = new BuscadorCaminoMasCorto(espacio);
-		
-		rutaMasCorta = buscador.buscarCaminoMasCorto();
+		for (int i = 0; i < rutaDeRutas.size(); i++) { // hau zela itxen da rekursibo??????
+			estanteriaActual = rutaDeRutas.get(numeroRuta).get(i);
+			getX = estanterias.get(i).punto.coordenadaX;
+			getY = estanterias.get(i).punto.coordenadaY;
+			
+			buscador = new BuscadorCaminoMasCorto(espacio);
+			rutaMasCorta = buscador.buscarCaminoMasCorto();
+			
+		}
+
+		return 0;
 	}
 	
 	public void mostrarCaminoMasCorto() {
@@ -94,10 +108,10 @@ public class Principal  implements Runnable{
 	}
 	
 	public void inicializarEstanterias() {
-		estanterias.add(new Estanteria(2, 2, 2, 3, 1,  "Estanteria1"));
-		estanterias.add(new Estanteria(2, 4, 2, 5, 2,  "Estanteria2"));
-		estanterias.add(new Estanteria(2, 6, 2, 7, 3,  "Estanteria3"));
-		
+		estanterias.add(new Estanteria(2, 2, 2, 3, 1, "Estanteria1"));
+		estanterias.add(new Estanteria(2, 4, 2, 5, 2, "Estanteria2"));
+		estanterias.add(new Estanteria(2, 6, 2, 7, 3, "Estanteria3"));
+	
 		estanterias.add(new Estanteria(4, 2, 4, 3, 4, "Estanteria4"));
 		estanterias.add(new Estanteria(4, 4, 4, 5, 5, "Estanteria5"));
 		estanterias.add(new Estanteria(4, 6, 4, 7, 6, "Estanteria6"));
@@ -133,7 +147,7 @@ public class Principal  implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			productos = WebServiceClients.paketiaJasoZerbitzaritik();
+			productos = WebServiceClients.paketiaJasoZerbitzaritik(); //hau array baten sartubida!
 			
 			try {
 				product = (ArrayList<Integer>) JSONtoObject.conversion();
