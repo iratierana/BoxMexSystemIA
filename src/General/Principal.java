@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 import Conversion.JSONtoObject;
 import WebClients.WebServiceClients;
 
-public class Principal  implements Runnable{
+public class Principal implements Runnable{
 
 	Espacio espacio;
 	BuscadorCaminoMasCorto buscador;
@@ -44,7 +44,7 @@ public class Principal  implements Runnable{
 		
 		int distanciaMenor = distancias.get(0);
 		
-		for (int i = 0; i < distancias.size(); i++) {
+		for (int i = 0; i < distancias.size(); i++) { // ???????
 			if(distanciaMenor > distancias.get(i)){
 				distanciaMenor = distancias.get(i);
 			}
@@ -158,7 +158,7 @@ public class Principal  implements Runnable{
 			
 			if(WebServiceClients.iaAktibatutaEdoEz()){
 				buscarCaminoMasCorto();
-			}else {
+			}else{
 				caminoPredetermindado(product);
 			}
 			
