@@ -174,23 +174,26 @@ public class Principal{
 		
 		while (true) {
 			try {
+				
+				productos = WebServiceClients.paketiaJasoZerbitzaritik();
+				
+				if(productos != null){
+					
+					product = (ArrayList<Integer>) JSONtoObject.conversion(productos);
+					buscarCaminoMasCorto();
+					
+					if(WebServiceClients.iaAktibatutaEdoEz()){
+						buscarCaminoMasCorto();
+					}else{
+						caminoPredetermindado(product);
+					}
+				}
+				
 				Thread.sleep(5000);
+				
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-			productos = WebServiceClients.paketiaJasoZerbitzaritik();
-			System.out.println(productos);
-			product = (ArrayList<Integer>) JSONtoObject.conversion(productos);
-			System.out.println(product);
-			buscarCaminoMasCorto();
-			
-			if(WebServiceClients.iaAktibatutaEdoEz()){
-				buscarCaminoMasCorto();
-			}else{
-				caminoPredetermindado(product);
-			}
+			}			
 		}
 		
 		
