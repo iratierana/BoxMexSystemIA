@@ -13,6 +13,7 @@ import WebClients.WebServiceClients;
 public class Principal implements Runnable{
 
 	Espacio espacio;
+	Campo campo;
 	BuscadorCaminoMasCorto buscador;
 	Ruta rutaMasCorta;
 	BuscarCaminoPredeterminado caminoPredeterminado;
@@ -21,86 +22,135 @@ public class Principal implements Runnable{
 	ArrayList<Estanteria> estanterias = new ArrayList<Estanteria>();
 	ArrayList<ArrayList<Integer>> rutaDeRutas = new ArrayList<ArrayList<Integer>>();
 	ArrayList<Integer> distancias = new ArrayList<Integer>();
+	Combinador combinador;
 	Random random = new Random();
 	
 	public Principal(){
 		espacio = new Espacio();
+		buscador = new BuscadorCaminoMasCorto(espacio);
 		caminoPredeterminado = new BuscarCaminoPredeterminado();
 	}
 	
 	public void buscarCaminoMasCorto(){
 		
-		crearRutaDeRutas();
+		combinador = new Combinador(product);
+		combinador.buscarCombinaciones();
+		combinador.printCombinaciones();
+		rutaDeRutas = combinador.getCombinaciones();
+		System.out.println("RutaDeRutas"+rutaDeRutas.size());
 		
 		for (int i = 0; i < rutaDeRutas.size(); i++){
-			distancias.add(calcularDistanciaDeCadaRuta(rutaDeRutas.get(i), i));
+			System.out.println("i"+i);
+			distancias.add(calcularDistanciaDeCadaRuta(rutaDeRutas.get(i)));
 		}
+		System.out.println("SELECCIONAR");
+		int indice = seleccionarRutaMasCorta();
 		
-		seleccionarRutaMasCorta();
-		
+		realizarRuta(rutaDeRutas.get(indice));
 	}
 	
-	private void seleccionarRutaMasCorta() {
+	private void realizarRuta(ArrayList<Integer> ruta) {
+		System.out.println("REALIZAR");
+		campo = new Campo();
+		
+		//INICIO -> PRIMER PUNTO
+		espacio.origen.setCoordenadaX(1);
+		espacio.origen.setCoordenadaY(1);
+
+		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaX);
+		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaY);
+		
+		buscador.espacio = espacio;
+		Ruta rutaAux = buscador.buscarCaminoMasCorto();
+		campo.verRutaEnEspacio(rutaAux);
+		
+		// PRIMER -> HASTA ULTIMO
+		
+		for (int i = 0; i < ruta.size() - 1; i++) {
+			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaX);
+			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaY);
+			
+			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaX);
+			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaY);
+			
+			buscador.espacio = espacio;
+			rutaAux = buscador.buscarCaminoMasCorto();
+			campo.verRutaEnEspacio(rutaAux);
+		}
+		
+		// ULTIMO -> INICIO
+		
+		espacio.origen.setCoordenadaX(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaX);
+		espacio.origen.setCoordenadaY(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaY);
+		
+		espacio.destino.setCoordenadaX(1);
+		espacio.destino.setCoordenadaY(1);
+		
+		buscador.espacio = espacio;
+		rutaAux = buscador.buscarCaminoMasCorto();
+		campo.verRutaEnEspacio(rutaAux);
+		
+	}
+
+	private int seleccionarRutaMasCorta() {
 		
 		int distanciaMenor = distancias.get(0);
+		int indice = 0;
 		
-		for (int i = 0; i < distancias.size(); i++) { // ???????
+		for (int i = 1; i < distancias.size(); i++) {
 			if(distanciaMenor > distancias.get(i)){
 				distanciaMenor = distancias.get(i);
+				indice = i;
 			}
 		}
-	}
-
-	public void crearRutaDeRutas () {
-		int posicionAleatoria;
-		int numPosibilidades = factorial(product.size());
-		rutaDeRutas.add(product);
 		
-		while (rutaDeRutas.size() < numPosibilidades) {
-			ArrayList<Integer> nuevaPruebaDeRuta = new ArrayList<Integer>();
-			for (int i = 0; i < product.size(); i++) {
-				do {
-					posicionAleatoria = random.nextInt(product.size());
-				}
-				while (nuevaPruebaDeRuta.contains(posicionAleatoria));
-				nuevaPruebaDeRuta.add(posicionAleatoria);
-			}
-			
-			if (!rutaDeRutas.contains(nuevaPruebaDeRuta)) {
-				rutaDeRutas.add(nuevaPruebaDeRuta);
-			}
-		}
+		return indice;
 	}
 	
-	public int factorial(int number) {
-        if (number <= 1){
-            return 1;
-        }else{
-            return number * factorial(number - 1);
-        }
-    }
-	
-	public int calcularDistanciaDeCadaRuta(ArrayList<Integer> ruta, int numeroRuta) {
-				
-		int estanteriaActual;
-		int getX;
-		int getY;
+	public int calcularDistanciaDeCadaRuta(ArrayList<Integer> ruta) {
+		int sumaRuta = 0;
 		
-		for (int i = 0; i < rutaDeRutas.size(); i++) { // hau zela itxen da rekursibo??????
-			estanteriaActual = rutaDeRutas.get(numeroRuta).get(i);
-			getX = estanterias.get(i).punto.coordenadaX;
-			getY = estanterias.get(i).punto.coordenadaY;
-			
-			buscador = new BuscadorCaminoMasCorto(espacio);
-			rutaMasCorta = buscador.buscarCaminoMasCorto();
-			
-		}
+		//INICIO -> PRIMER PUNTO
+		espacio.origen.setCoordenadaX(1);
+		espacio.origen.setCoordenadaY(1);
 
-		return 0;
-	}
-	
-	public void mostrarCaminoMasCorto() {
-		espacio.verRutaEnEspacio(rutaMasCorta);	
+		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaX);
+		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaY);
+		
+		buscador.espacio = espacio;
+		Ruta rutaAux = buscador.buscarCaminoMasCorto();
+		sumaRuta = sumaRuta + rutaAux.recorrido;
+		
+		// PRIMER -> HASTA ULTIMO
+		
+		for (int i = 0; i < ruta.size() - 1; i++) {
+			
+			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaX);
+			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaY);
+			
+			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaX);
+			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaY);
+			
+			buscador.espacio = espacio;
+			rutaAux = buscador.buscarCaminoMasCorto();
+			sumaRuta = sumaRuta + rutaAux.recorrido;
+		}
+		
+		// ULTIMO -> INICIO
+		
+		espacio.origen.setCoordenadaX(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaX);
+		espacio.origen.setCoordenadaY(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaY);
+		
+		espacio.destino.setCoordenadaX(1);
+		espacio.destino.setCoordenadaY(1);
+		
+		buscador.espacio = espacio;
+		rutaAux = buscador.buscarCaminoMasCorto();
+		sumaRuta = sumaRuta + rutaAux.recorrido;
+		
+		System.out.println("-----");
+
+		return sumaRuta;
 	}
 	
 	public void caminoPredetermindado(List product){
@@ -119,21 +169,32 @@ public class Principal implements Runnable{
 		estanterias.add(new Estanteria(6, 2, 6, 3, 7, "Estanteria7"));
 		estanterias.add(new Estanteria(6, 4, 6, 5, 8, "Estanteria8"));
 		estanterias.add(new Estanteria(6, 6, 6, 7, 9, "Estanteria9"));
+
+		product.add(1);
+		product.add(3);
+		product.add(4);
+		product.add(2);
+		
+		
+		buscarCaminoMasCorto();
 		
 	}
 	
 	public static void main(String[] args){
 		Principal programa = new Principal();
 		long instanteInicial = System.currentTimeMillis();
+		
 		programa.inicializarEstanterias();
 		
 		
-		Thread t = new Thread(new Principal());
-        t.start();
+		//Thread t = new Thread(new Principal());
+       // t.start();
+		
+		
 		
 		long instanteFinal = System.currentTimeMillis();
 		System.out.println("Tiempo utilizado:  "+ (instanteFinal - instanteInicial));
-		programa.mostrarCaminoMasCorto();
+	
 	}
 
 	@Override

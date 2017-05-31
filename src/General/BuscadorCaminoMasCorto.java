@@ -10,20 +10,21 @@ public class BuscadorCaminoMasCorto {
 	Ruta rutaMasCorta;
 	
 	public BuscadorCaminoMasCorto(Espacio espacio){
-		listaRutas = new ListaRutas();
 		this.espacio = espacio;
 		this.origen = espacio.getOrigen();
 		this.destino = espacio.getDestino();
 		
-		listaRutas.add(new Ruta(origen,this.manhattan(origen,destino),0));
 	}
 
 	private int manhattan(Punto punto1, Punto punto2) {
 		
-		return Math.abs(punto1.getCoordenadaX()-punto2.getCoordenadaX())+Math.abs(punto1.getCoordenadaY()-punto2.getCoordenadaY());
+		return Math.abs(punto1.getCoordenadaX() - punto2.getCoordenadaX()) + Math.abs(punto1.getCoordenadaY() - punto2.getCoordenadaY());
 	}
 	
 	public Ruta buscarCaminoMasCorto(){
+		listaRutas = new ListaRutas();
+		listaRutas.add(new Ruta(origen,this.manhattan(origen,destino),0));
+		
 		while (!listaRutas.vacia()){
 			Ruta ruta = listaRutas.take();
 			

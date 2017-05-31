@@ -21,6 +21,8 @@ public class Espacio {
 
 	public Espacio() {
 		espacio = new int[DIMENSION][DIMENSION];
+		origen = new Punto(0, 0);
+		destino = new Punto(0, 0);
 		leerEspacioFichero();
 
 	}
@@ -65,15 +67,6 @@ public class Espacio {
 		return destino;
 	}
 
-	public void verEspacio() {
-		for (int i = 0; i < DIMENSION; i++) {
-			for (int j = 0; j < DIMENSION; j++) {
-				System.out.print(espacio[i][j] + " ");
-			}
-			System.out.println();
-		}
-	}
-
 	public List<Nodo> getNodosAdyacentes(Nodo nodo) {
 		List<Nodo> adyacentes = new ArrayList<>();
 		Punto punto = nodo.getPunto();
@@ -100,133 +93,4 @@ public class Espacio {
 		return adyacentes;
 	}
 
-	public void verRutaEnEspacio(Ruta ruta) {
-		Principal principal = new Principal();
-		
-		if (ruta == null) {
-			System.out.println("No se ha encontrado camino");
-		} else {
-			List<Nodo> nodos = ruta.getListaNodos();
-			for (Nodo nodo : nodos) {
-				Punto posicion = nodo.getPunto();
-				espacio[posicion.coordenadaX][posicion.coordenadaY] = 8;
-
-				//HAU HEMEN EZ, GOIXEN HOBETO NIK USTE!!! aitor?
-				String coordenadaX = String.valueOf(posicion.coordenadaX);
-				String coordenadaY = String.valueOf(posicion.coordenadaY);
-
-				String concatenado = coordenadaX + coordenadaY;
-
-				int resultado = Integer.parseInt(concatenado);
-
-				switch (resultado) {
-				case 11:
-					System.out.println("Estanteria 1");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(1)){
-							principal.product.remove(i);
-							System.out.println("Elemento 1 removido de robot");
-						}
-					}
-					
-					break;
-
-				case 25:
-					System.out.println("Estanteria 2");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(2)){
-							principal.product.remove(i);
-							System.out.println("Elemento 2 removido de robot");
-						}
-					}
-
-					break;
-
-					
-				case 27:
-					System.out.println("Estanteria 3");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(3)){
-							principal.product.remove(i);
-							System.out.println("Elemento 3 removido de robot");
-						}
-					}
-
-					break;
-					
-				case 43:
-					System.out.println("Estanteria 4");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(4)){
-							principal.product.remove(i);
-							System.out.println("Elemento 4 removido de robot");
-						}
-					}
-
-					break;
-					
-				case 45:
-					System.out.println("Estanteria 5");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(5)){
-							principal.product.remove(i);
-							System.out.println("Elemento 5 removido de robot");
-						}
-					}
-
-					break;
-					
-				case 47:
-					System.out.println("Estanteria 6");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(6)){
-							principal.product.remove(i);
-							System.out.println("Elemento 6 removido de robot");
-						}
-					}
-
-					break;
-					
-				case 63:
-					System.out.println("Estanteria 7");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(7)){
-							principal.product.remove(i);
-							System.out.println("Elemento 7 removido de robot");
-						}
-					}
-
-					break;
-					
-				case 65:
-					System.out.println("Estanteria 8");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(8)){
-							principal.product.remove(i);
-							System.out.println("Elemento 8 removido de robot");
-						}
-					}
-
-					break;
-					
-				case 67:
-					System.out.println("Estanteria 9");
-					for (int i = 0; i < principal.product.size(); i++) {
-						if(principal.product.get(i).equals(9)){
-							principal.product.remove(i);
-							System.out.println("Elemento 9 removido de robot");
-						}
-					}
-
-					break;
-					
-				default:
-					System.out.println("No existe ese punto de recogida" + resultado);
-					break;
-				}
-			}
-		}
-
-		this.verEspacio();
-	}
 }
