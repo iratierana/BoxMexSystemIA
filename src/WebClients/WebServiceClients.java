@@ -49,7 +49,7 @@ public class WebServiceClients {
 			respuesta = response.getEntity(String.class);
 			
 		}catch (UniformInterfaceException e) {
-			System.out.println("La lista de espera del SERVIDOR esta vacia");
+			System.out.println("La lista de espera de ENTRADA esta vacia");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -57,5 +57,28 @@ public class WebServiceClients {
 		}	
 		return respuesta;
 	}
+
+	public static String paketiaJasoZerbitzaritikKanporaAteratzeko(){
+		String respuesta = null;
+		Client client = null;	
 		
+		try {
+			client = Client.create();
+			WebResource webResource = client.resource(
+					"http://localhost:8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
+					);
+			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+						
+			respuesta = response.getEntity(String.class);
+			
+		}catch (UniformInterfaceException e) {
+			System.out.println("La lista de espera de ENTRADA esta vacia");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			client.destroy();			
+		}	
+		return respuesta;
+	}
+
 }
