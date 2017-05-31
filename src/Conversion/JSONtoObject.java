@@ -2,6 +2,7 @@ package Conversion;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,46 +12,42 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 public class JSONtoObject {
 
 	
-	static String products;
-	static List productos = new ArrayList();
-	
-	public static List conversion() throws IOException, ParseException, FileNotFoundException{
-		
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(products);
-		
-		
-		JSONArray libro = (JSONArray) jsonObject.get("pakete");
-		
-		Iterator iterator = libro.iterator();
-		
-		while (iterator.hasNext()) {
-			JSONObject object = (JSONObject) iterator.next();
-			
-			int id = (int) object.get("productoId");
-			System.out.println(id);
-			
-			
-			String nombre = (String) object.get("nombre");
-			System.out.println(nombre);
-			
-			String fechaCaducidad = (String) object.get("fechaCaducidad");
-			System.out.println(fechaCaducidad);
-			
-			int estanteriaId = (int) object.get("estanteriaId");
-			System.out.println(estanteriaId);
-			productos.add(estanteriaId);
-			
-			int categoriaId = (int) object.get("categoriaId");
-			System.out.println(categoriaId);
-			
+	/**
+	 * Recibe el pakete en formato json y lo pasa a un objeto de java.
+	 *
+	 * @param paketeStr pakete en json
+	 * @return the ArrayList de integers
+	 */
+	public static ArrayList<Integer> conversion(final String paketeStr) {
+		ArrayList<Integer> listProd = new ArrayList<Integer>();
+
+		try {
+
+			StringReader reader = new StringReader(paketeStr);
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
+
+			JSONArray arrayProductos = (JSONArray) jsonObject.get("listaProductos");
+
+			for (int kont = 0; kont < arrayProductos.size(); kont++) {
+				JSONObject producto = (JSONObject) arrayProductos.get(kont);
+				
+				Long estanteria = (Long) producto.get("estanteriaId");
+				
+				listProd.add(estanteria.intValue());
+			}
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		
-		return productos;
-		
+
+		return listProd;
 	}
-	
 }

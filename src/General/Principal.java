@@ -1,16 +1,14 @@
 package General;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.json.simple.parser.ParseException;
 
 import Conversion.JSONtoObject;
 import WebClients.WebServiceClients;
 
-public class Principal implements Runnable{
+public class Principal{
 
 	Espacio espacio;
 	Campo campo;
@@ -18,6 +16,7 @@ public class Principal implements Runnable{
 	Ruta rutaMasCorta;
 	BuscarCaminoPredeterminado caminoPredeterminado;
 	String productos;
+	
 	public ArrayList<Integer> product = new ArrayList<Integer>();
 	ArrayList<Estanteria> estanterias = new ArrayList<Estanteria>();
 	ArrayList<ArrayList<Integer>> rutaDeRutas = new ArrayList<ArrayList<Integer>>();
@@ -34,6 +33,7 @@ public class Principal implements Runnable{
 	public void buscarCaminoMasCorto(){
 		
 		combinador = new Combinador(product);
+		System.out.println("Product2"+product);
 		combinador.buscarCombinaciones();
 		combinador.printCombinaciones();
 		rutaDeRutas = combinador.getCombinaciones();
@@ -113,10 +113,11 @@ public class Principal implements Runnable{
 		//INICIO -> PRIMER PUNTO
 		espacio.origen.setCoordenadaX(1);
 		espacio.origen.setCoordenadaY(1);
+		System.out.println("Step0");
 
 		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaX);
 		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaY);
-		
+		System.out.println("Step1");
 		buscador.espacio = espacio;
 		Ruta rutaAux = buscador.buscarCaminoMasCorto();
 		sumaRuta = sumaRuta + rutaAux.recorrido;
@@ -130,7 +131,7 @@ public class Principal implements Runnable{
 			
 			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaX);
 			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaY);
-			
+			System.out.println("Step2");
 			buscador.espacio = espacio;
 			rutaAux = buscador.buscarCaminoMasCorto();
 			sumaRuta = sumaRuta + rutaAux.recorrido;
@@ -143,7 +144,7 @@ public class Principal implements Runnable{
 		
 		espacio.destino.setCoordenadaX(1);
 		espacio.destino.setCoordenadaY(1);
-		
+		System.out.println("Step3");
 		buscador.espacio = espacio;
 		rutaAux = buscador.buscarCaminoMasCorto();
 		sumaRuta = sumaRuta + rutaAux.recorrido;
@@ -158,6 +159,7 @@ public class Principal implements Runnable{
 	}
 	
 	public void inicializarEstanterias() {
+		
 		estanterias.add(new Estanteria(2, 2, 2, 3, 1, "Estanteria1"));
 		estanterias.add(new Estanteria(2, 4, 2, 5, 2, "Estanteria2"));
 		estanterias.add(new Estanteria(2, 6, 2, 7, 3, "Estanteria3"));
@@ -169,14 +171,28 @@ public class Principal implements Runnable{
 		estanterias.add(new Estanteria(6, 2, 6, 3, 7, "Estanteria7"));
 		estanterias.add(new Estanteria(6, 4, 6, 5, 8, "Estanteria8"));
 		estanterias.add(new Estanteria(6, 6, 6, 7, 9, "Estanteria9"));
-
-		product.add(1);
-		product.add(3);
-		product.add(4);
-		product.add(2);
 		
+		while (true) {
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			productos = WebServiceClients.paketiaJasoZerbitzaritik();
+			System.out.println(productos);
+			product = (ArrayList<Integer>) JSONtoObject.conversion(productos);
+			System.out.println(product);
+			buscarCaminoMasCorto();
+			
+			if(WebServiceClients.iaAktibatutaEdoEz()){
+				buscarCaminoMasCorto();
+			}else{
+				caminoPredetermindado(product);
+			}
+		}
 		
-		buscarCaminoMasCorto();
 		
 	}
 	
@@ -185,19 +201,14 @@ public class Principal implements Runnable{
 		long instanteInicial = System.currentTimeMillis();
 		
 		programa.inicializarEstanterias();
-		
-		
-		//Thread t = new Thread(new Principal());
-       // t.start();
-		
-		
+
 		
 		long instanteFinal = System.currentTimeMillis();
 		System.out.println("Tiempo utilizado:  "+ (instanteFinal - instanteInicial));
 	
 	}
 
-	@Override
+	/*@Override
 	public void run() {
 		boolean piztuta = true;
 		
@@ -208,14 +219,13 @@ public class Principal implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			productos = WebServiceClients.paketiaJasoZerbitzaritik(); //hau array baten sartubida!
+			productos = WebServiceClients.paketiaJasoZerbitzaritik();
+			System.out.println(productos);
 			
-			try {
-				product = (ArrayList<Integer>) JSONtoObject.conversion();
-			} catch (IOException | ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
+			product = (ArrayList<Integer>) JSONtoObject.conversion(productos);
+			System.out.println(product);
+			
 			
 			if(WebServiceClients.iaAktibatutaEdoEz()){
 				buscarCaminoMasCorto();
@@ -225,6 +235,6 @@ public class Principal implements Runnable{
 			
 		}
 		
-	}
+	}*/
 
 }
