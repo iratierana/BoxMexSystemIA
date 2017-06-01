@@ -16,7 +16,7 @@ public class WebServiceClients {
 		try {
 			client = Client.create();
 			WebResource webResource = client.resource(
-					"http://localhost:8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"					
+					"http://172.17.16.234:8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"					
 					);
 			ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
 			
@@ -42,7 +42,7 @@ public class WebServiceClients {
 		try {
 			client = Client.create();
 			WebResource webResource = client.resource(
-					"http://localhost:8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
+					"http://172.17.16.234:8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
 					);
 			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 						
@@ -65,7 +65,7 @@ public class WebServiceClients {
 		try {
 			client = Client.create();
 			WebResource webResource = client.resource(
-					"http://localhost:8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
+					"http://172.17.16.234:8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
 					);
 			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 						

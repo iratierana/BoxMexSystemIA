@@ -39,14 +39,14 @@ public class HiloColocarPaquetes implements Runnable {
 				if(paketeEnString != null){
 					
 					listaIdProductos = (ArrayList<Integer>) JSONtoObject.conversion(paketeEnString);
-					buscador.hacerCaminoMasCorto(listaIdProductos);
+					System.out.println("ListaIdProductos COLOCAR PAQUETES" + listaIdProductos);
 					
 					lock.lock();
 					boolean ia =WebServiceClients.iaAktibatutaEdoEz();
 					lock.unlock();
 					
 					if(ia){
-						buscador.hacerCaminoMasCorto(listaIdProductos);
+						buscador.hacerCaminoMasCorto(listaIdProductos, "colocar");
 					}else{
 						caminoPredeterminado.caminoPredeterminado(listaIdProductos);
 					}

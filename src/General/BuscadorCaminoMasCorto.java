@@ -3,6 +3,8 @@ package General;
 import java.util.ArrayList;
 import java.util.List;
 
+import Hilos.HiloSacarPaquetes;
+
 public class BuscadorCaminoMasCorto {
 
 	ListaRutas listaRutas;
@@ -52,7 +54,7 @@ public class BuscadorCaminoMasCorto {
 	}
 	
 	
-	public void hacerCaminoMasCorto(ArrayList<Integer> listaIdProductos){
+	public void hacerCaminoMasCorto(ArrayList<Integer> listaIdProductos, String accion){
 		Combinador combinador;
 		ArrayList<ArrayList<Integer>> rutaDeRutas = new ArrayList<ArrayList<Integer>>();
 		
@@ -70,10 +72,10 @@ public class BuscadorCaminoMasCorto {
 		System.out.println("SELECCIONAR");
 		int indice = seleccionarRutaMasCorta();
 		
-		realizarRuta(rutaDeRutas.get(indice));
+		realizarRuta(rutaDeRutas.get(indice), listaIdProductos, accion);
 	}
 	
-	private void realizarRuta(ArrayList<Integer> ruta) {
+	private void realizarRuta(ArrayList<Integer> ruta, ArrayList<Integer> listaIdProductos, String accion) {
 		System.out.println("REALIZAR");
 		campo = new Campo();
 		
@@ -81,8 +83,15 @@ public class BuscadorCaminoMasCorto {
 		espacio.origen.setCoordenadaX(1);
 		espacio.origen.setCoordenadaY(1);
 
-		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaX);
-		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0)).puntoDeRecojida.punto.coordenadaY);
+		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaX);
+		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaY);
+		
+		if (accion.equals("sacar")) {
+			sacarProductos(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+
+		}else if (accion.equals("colocar")) {
+			colocarProductos(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+		}
 		
 		Ruta rutaAux = buscarCaminoMasCorto();
 		campo.verRutaEnEspacio(rutaAux);
@@ -90,12 +99,18 @@ public class BuscadorCaminoMasCorto {
 		// PRIMER -> HASTA ULTIMO
 		
 		for (int i = 0; i < ruta.size() - 1; i++) {
-			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaX);
-			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaY);
+			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i)-1).puntoDeRecojida.punto.coordenadaX);
+			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i)-1).puntoDeRecojida.punto.coordenadaY);
 			
-			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaX);
-			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaY);
+			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaX);
+			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaY);
 			
+			if (accion.equals("sacar")) {
+				sacarProductos(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+
+			}else if (accion.equals("colocar")) {
+				colocarProductos(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+			}
 			rutaAux = buscarCaminoMasCorto();
 			campo.verRutaEnEspacio(rutaAux);
 		}
@@ -111,6 +126,238 @@ public class BuscadorCaminoMasCorto {
 		rutaAux = buscarCaminoMasCorto();
 		campo.verRutaEnEspacio(rutaAux);
 		
+	}
+	
+	private void colocarProductos(int x, int y, ArrayList<Integer> listaIdProductos){
+				
+		String coordenadaX = String.valueOf(x);
+		System.out.println("CoordenadaX" + coordenadaX);
+		String coordenadaY = String.valueOf(y);
+		System.out.println("CoordenadaX" + coordenadaY);
+
+		
+		String concatenado = coordenadaX + coordenadaY;
+		System.out.println("Coordenadas concatenadas -->" + concatenado);
+
+		switch (concatenado) {
+		case "23":
+			System.out.println("Estanteria 1");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(1)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 1 removido de robot");
+				}
+			}
+			
+			break;
+
+		case "25":
+			System.out.println("Estanteria 2");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(2)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 2 removido de robot");
+				}
+			}
+
+			break;
+
+			
+		case "27":
+			System.out.println("Estanteria 3");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(3)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 3 removido de robot");
+				}
+			}
+
+			break;
+			
+		case "43":
+			System.out.println("Estanteria 4");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(4)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 4 removido de robot");
+				}
+			}
+
+			break;
+			
+		case "45":
+			System.out.println("Estanteria 5");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(5)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 5 removido de robot");
+				}
+			}
+
+			break;
+			
+		case "47":
+			System.out.println("Estanteria 6");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(6)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 6 removido de robot");
+				}
+			}
+
+			break;
+			
+		case "63":
+			System.out.println("Estanteria 7");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(7)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 7 removido de robot");
+				}
+			}
+
+			break;
+			
+		case "65":
+			System.out.println("Estanteria 8");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(8)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 8 removido de robot");
+				}
+			}
+
+			break;
+			
+		case "67":
+			System.out.println("Estanteria 9");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(9)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 9 removido de robot");
+				}
+			}
+
+			break;
+			
+		default:
+			System.out.println("No existe ese punto de recogida" + concatenado);
+			break;
+		}
+	}
+	
+	private void sacarProductos(int x, int y, ArrayList<Integer> listaIdProductos){
+		
+		String coordenadaX = String.valueOf(x);
+		String coordenadaY = String.valueOf(y);
+
+		String concatenado = coordenadaX + coordenadaY;
+
+		switch (concatenado) {
+		case "23":
+			System.out.println("Estanteria 1");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(1)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 1 removido de la estanteria");
+				}
+			}
+			
+			break;
+
+		case "25":
+			System.out.println("Estanteria 2");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(2)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 2 removido de la estanteria");
+				}
+			}
+
+			break;
+
+			
+		case "27":
+			System.out.println("Estanteria 3");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(3)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 3 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		case "43":
+			System.out.println("Estanteria 4");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(4)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 4 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		case "45":
+			System.out.println("Estanteria 5");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(5)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 5 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		case "47":
+			System.out.println("Estanteria 6");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(6)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 6 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		case "63":
+			System.out.println("Estanteria 7");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(7)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 7 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		case "65":
+			System.out.println("Estanteria 8");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(8)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 8 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		case "67":
+			System.out.println("Estanteria 9");
+			for (int i = 0; i < listaIdProductos.size(); i++) {
+				if(listaIdProductos.get(i).equals(9)){
+					listaIdProductos.remove(i);
+					System.out.println("Elemento 9 removido de la estanteria");
+				}
+			}
+
+			break;
+			
+		default:
+			System.out.println("No existe ese punto de recogida" + concatenado);
+			break;
+		}
 	}
 
 	private int seleccionarRutaMasCorta() {

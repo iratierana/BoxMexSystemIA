@@ -38,14 +38,14 @@ public class HiloSacarPaquetes implements Runnable {
 				if(paketeEnString != null){
 					
 					listaIdProductos = (ArrayList<Integer>) JSONtoObject.conversion(paketeEnString);
-					buscador.hacerCaminoMasCorto(listaIdProductos);
+					System.out.println("ListaIdProductos SACAR PAQUETES" + listaIdProductos);
 					
 					lock.lock();
 					boolean ia =WebServiceClients.iaAktibatutaEdoEz();
 					lock.unlock();
 					
 					if(ia){
-						buscador.hacerCaminoMasCorto(listaIdProductos);
+						buscador.hacerCaminoMasCorto(listaIdProductos, "sacar");
 					}else{
 						caminoPredeterminado.caminoPredeterminado(listaIdProductos);
 					}
