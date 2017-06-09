@@ -1,5 +1,10 @@
 package WebClients;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.Client;
@@ -9,14 +14,24 @@ import com.sun.jersey.api.client.WebResource;
 
 public class WebServiceClients {
 	
+	final static String FICHEROPROPIEDADES = "ipConf.properties";
+	
+	static String host;
+	
+	
 	public static boolean iaAktibatutaEdoEz(){
 		String respuesta = null;
 		Client client = null;	
 		
 		try {
+			cargarPropiedades();
 			client = Client.create();
 			WebResource webResource = client.resource(
+<<<<<<< HEAD
 					"http://172.17.16.154:8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"					
+=======
+					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"					
+>>>>>>> refs/remotes/origin/development
 					);
 			ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
 			
@@ -40,9 +55,14 @@ public class WebServiceClients {
 		Client client = null;	
 		
 		try {
+			cargarPropiedades();
 			client = Client.create();
 			WebResource webResource = client.resource(
+<<<<<<< HEAD
 					"http://172.17.16.154:8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
+=======
+					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
+>>>>>>> refs/remotes/origin/development
 					);
 			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 						
@@ -63,9 +83,14 @@ public class WebServiceClients {
 		Client client = null;	
 		
 		try {
+			cargarPropiedades();
 			client = Client.create();
 			WebResource webResource = client.resource(
+<<<<<<< HEAD
 					"http://172.17.16.154:8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
+=======
+					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
+>>>>>>> refs/remotes/origin/development
 					);
 			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 						
@@ -79,6 +104,17 @@ public class WebServiceClients {
 			client.destroy();			
 		}	
 		return respuesta;
+	}
+	
+	/**
+	 * Cargar ip del archivo de configuracion.
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static void cargarPropiedades() throws FileNotFoundException, IOException{
+		Properties propiedades = new Properties();
+		propiedades.load(new FileInputStream(FICHEROPROPIEDADES));
+		host = propiedades.getProperty("ipAplication", "127.0.0.1");
 	}
 
 }
