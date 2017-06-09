@@ -40,11 +40,13 @@ public class BuscarCaminoPredeterminado {
 
 	}
 	
-	public void caminoPredeterminado(List productos){
+	public void caminoPredeterminado(List productos) throws InterruptedException{
 		espacio[1][1] = 8;
 		espacio[1][2] = 8;
 		espacio[1][3] = 8;
 		espacio[2][3] = 8;
+		
+		Thread.sleep(2000);
 		
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(1)){
@@ -56,6 +58,8 @@ public class BuscarCaminoPredeterminado {
 		espacio[3][3] = 8;
 		espacio[4][3] = 8;
 		
+		Thread.sleep(2000);
+		
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(4)){
 				productos.remove(i);
@@ -65,6 +69,8 @@ public class BuscarCaminoPredeterminado {
 		
 		espacio[5][3] = 8;
 		espacio[6][3] = 8;
+		
+		Thread.sleep(2000);
 		
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(7)){
@@ -77,6 +83,8 @@ public class BuscarCaminoPredeterminado {
 		espacio[7][4] = 8;
 		espacio[7][5] = 8;
 		espacio[6][5] = 8;
+		
+		Thread.sleep(2000);
 
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(8)){
@@ -87,6 +95,8 @@ public class BuscarCaminoPredeterminado {
 		
 		espacio[5][5] = 8;
 		espacio[4][5] = 8;
+		
+		Thread.sleep(2000);
 
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(5)){
@@ -97,6 +107,8 @@ public class BuscarCaminoPredeterminado {
 		
 		espacio[3][5] = 8;
 		espacio[2][5] = 8;
+		
+		Thread.sleep(2000);
 		
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(2)){
@@ -110,6 +122,8 @@ public class BuscarCaminoPredeterminado {
 		espacio[1][7] = 8;
 		espacio[2][7] = 8;
 		
+		Thread.sleep(2000);
+		
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(3)){
 				productos.remove(i);
@@ -120,6 +134,8 @@ public class BuscarCaminoPredeterminado {
 		espacio[3][7] = 8;
 		espacio[4][7] = 8;
 		
+		Thread.sleep(2000);
+		
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(6)){
 				productos.remove(i);
@@ -129,6 +145,8 @@ public class BuscarCaminoPredeterminado {
 		
 		espacio[5][7] = 8;
 		espacio[6][7] = 8;
+		
+		Thread.sleep(2000);
 
 		for (int i = 0; i < productos.size(); i++) {
 			if(productos.get(i).equals(9)){

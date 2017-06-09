@@ -47,13 +47,9 @@ public class Principal{
 	
 	public static void main(String[] args){
 		Principal programa = new Principal();
-		long instanteInicial = System.currentTimeMillis();
 		
 		programa.iniciarSimulador();
-		
-		long instanteFinal = System.currentTimeMillis();
-		System.out.println("Tiempo utilizado:  "+ (instanteFinal - instanteInicial));
-	
+			
 	}
 
 

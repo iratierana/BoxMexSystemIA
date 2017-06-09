@@ -3,7 +3,6 @@ package General;
 import java.util.ArrayList;
 import java.util.List;
 
-import Hilos.HiloSacarPaquetes;
 
 public class BuscadorCaminoMasCorto {
 
@@ -54,7 +53,7 @@ public class BuscadorCaminoMasCorto {
 	}
 	
 	
-	public void hacerCaminoMasCorto(ArrayList<Integer> listaIdProductos, String accion){
+	public void hacerCaminoMasCorto(ArrayList<Integer> listaIdProductos, String accion) throws InterruptedException{
 		Combinador combinador;
 		ArrayList<ArrayList<Integer>> rutaDeRutas = new ArrayList<ArrayList<Integer>>();
 		
@@ -75,7 +74,7 @@ public class BuscadorCaminoMasCorto {
 		realizarRuta(rutaDeRutas.get(indice), listaIdProductos, accion);
 	}
 	
-	private void realizarRuta(ArrayList<Integer> ruta, ArrayList<Integer> listaIdProductos, String accion) {
+	private void realizarRuta(ArrayList<Integer> ruta, ArrayList<Integer> listaIdProductos, String accion) throws InterruptedException {
 		System.out.println("REALIZAR");
 		campo = new Campo();
 		
@@ -128,7 +127,7 @@ public class BuscadorCaminoMasCorto {
 		
 	}
 	
-	private void colocarProductos(int x, int y, ArrayList<Integer> listaIdProductos){
+	private void colocarProductos(int x, int y, ArrayList<Integer> listaIdProductos) throws InterruptedException{
 				
 		String coordenadaX = String.valueOf(x);
 		System.out.println("CoordenadaX" + coordenadaX);
@@ -141,6 +140,7 @@ public class BuscadorCaminoMasCorto {
 
 		switch (concatenado) {
 		case "23":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 1");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(1)){
@@ -152,6 +152,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 
 		case "25":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 2");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(2)){
@@ -164,6 +165,7 @@ public class BuscadorCaminoMasCorto {
 
 			
 		case "27":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 3");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(3)){
@@ -175,6 +177,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 			
 		case "43":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 4");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(4)){
@@ -186,6 +189,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 			
 		case "45":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 5");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(5)){
@@ -197,6 +201,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 			
 		case "47":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 6");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(6)){
@@ -208,6 +213,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 			
 		case "63":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 7");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(7)){
@@ -219,6 +225,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 			
 		case "65":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 8");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(8)){
@@ -230,6 +237,7 @@ public class BuscadorCaminoMasCorto {
 			break;
 			
 		case "67":
+			Thread.sleep(2000);
 			System.out.println("Estanteria 9");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
 				if(listaIdProductos.get(i).equals(9)){

@@ -46,9 +46,15 @@ public class HiloColocarPaquetes implements Runnable {
 					lock.unlock();
 					
 					if(ia){
+						long instanteInicial = System.currentTimeMillis();
 						buscador.hacerCaminoMasCorto(listaIdProductos, "colocar");
+						long instanteFinal = System.currentTimeMillis();
+						System.out.println("Tiempo utilizado:  "+ (instanteFinal - instanteInicial));
 					}else{
+						long instanteInicial = System.currentTimeMillis();
 						caminoPredeterminado.caminoPredeterminado(listaIdProductos);
+						long instanteFinal = System.currentTimeMillis();
+						System.out.println("Tiempo utilizado:  "+ (instanteFinal - instanteInicial));
 					}
 				}
 				
