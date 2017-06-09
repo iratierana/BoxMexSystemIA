@@ -27,11 +27,8 @@ public class WebServiceClients {
 			cargarPropiedades();
 			client = Client.create();
 			WebResource webResource = client.resource(
-<<<<<<< HEAD
-					"http://172.17.16.154:8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"					
-=======
-					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"					
->>>>>>> refs/remotes/origin/development
+
+					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/iaSysOnOff"	
 					);
 			ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
 			
@@ -58,11 +55,7 @@ public class WebServiceClients {
 			cargarPropiedades();
 			client = Client.create();
 			WebResource webResource = client.resource(
-<<<<<<< HEAD
-					"http://172.17.16.154:8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
-=======
-					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/listaEspera"					
->>>>>>> refs/remotes/origin/development
+					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/listaEspera"		
 					);
 			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 						
@@ -86,11 +79,7 @@ public class WebServiceClients {
 			cargarPropiedades();
 			client = Client.create();
 			WebResource webResource = client.resource(
-<<<<<<< HEAD
-					"http://172.17.16.154:8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
-=======
-					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/listaSalida"					
->>>>>>> refs/remotes/origin/development
+					"http://"+host+":8080/BoxMexWebApp/BoxMexWebApp/listaSalida"
 					);
 			ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 						
