@@ -3,139 +3,206 @@ package General;
 import java.util.ArrayList;
 import java.util.List;
 
-import Hilos.HiloSacarPaquetes;
-
+/**
+ * The Class BuscadorCaminoMasCorto.
+ */
 public class BuscadorCaminoMasCorto {
 
+	/** The lista rutas. */
 	ListaRutas listaRutas;
+
+	/** The espacio. */
 	Espacio espacio;
+
+	/** The destino. */
 	Punto origen, destino;
+
+	/** The ruta mas corta. */
 	Ruta rutaMasCorta;
-	
+
+	/** The distancias. */
 	ArrayList<Integer> distancias = new ArrayList<Integer>();
+
+	/** The estanterias. */
 	ArrayList<Estanteria> estanterias;
+
+	/** The campo. */
 	Campo campo;
-	
-	public BuscadorCaminoMasCorto(Espacio espacio, ArrayList<Estanteria> estanterias){
+
+	/**
+	 * Instantiates a new buscador camino mas corto.
+	 *
+	 * @param espacio
+	 *            the espacio
+	 * @param estanterias
+	 *            the estanterias
+	 */
+	public BuscadorCaminoMasCorto(final Espacio espacio, final ArrayList<Estanteria> estanterias) {
 		this.espacio = espacio;
 		this.origen = espacio.getOrigen();
 		this.destino = espacio.getDestino();
 		this.estanterias = estanterias;
-		
+
 	}
 
-	private int manhattan(Punto punto1, Punto punto2) {
-		
-		return Math.abs(punto1.getCoordenadaX() - punto2.getCoordenadaX()) + Math.abs(punto1.getCoordenadaY() - punto2.getCoordenadaY());
+	/**
+	 * Manhattan.
+	 *
+	 * @param punto1
+	 *            the punto 1
+	 * @param punto2
+	 *            the punto 2
+	 * @return the int
+	 */
+	private int manhattan(final Punto punto1, final Punto punto2) {
+
+		return Math.abs(punto1.getCoordenadaX() - punto2.getCoordenadaX())
+				+ Math.abs(punto1.getCoordenadaY() - punto2.getCoordenadaY());
 	}
-	
-	public Ruta buscarCaminoMasCorto(){
+
+	/**
+	 * Buscar camino mas corto.
+	 *
+	 * @return the ruta
+	 */
+	public Ruta buscarCaminoMasCorto() {
 		listaRutas = new ListaRutas();
-		listaRutas.add(new Ruta(origen,this.manhattan(origen,destino),0));
-		
-		while (!listaRutas.vacia()){
+		listaRutas.add(new Ruta(origen, this.manhattan(origen, destino), 0));
+
+		while (!listaRutas.vacia()) {
 			Ruta ruta = listaRutas.take();
-			
+
 			Nodo nodo = ruta.getLastNodo();
-			if (nodo.getPunto().equals(destino)){
+			if (nodo.getPunto().equals(destino)) {
 				rutaMasCorta = ruta;
 				break;
 			}
-			
-			List<Nodo> adyacentes = espacio.getNodosAdyacentes (nodo);
-			for (Nodo n : adyacentes){
+
+			List<Nodo> adyacentes = espacio.getNodosAdyacentes(nodo);
+			for (Nodo n : adyacentes) {
 				n.setDistancia(this.manhattan(n.getPunto(), destino));
 			}
-			
-			listaRutas.addRutas(ruta,adyacentes);
+
+			listaRutas.addRutas(ruta, adyacentes);
 		}
-		
+
 		return rutaMasCorta;
 	}
-	
-	
-	public void hacerCaminoMasCorto(ArrayList<Integer> listaIdProductos, String accion){
+
+	/**
+	 * Hacer camino mas corto.
+	 *
+	 * @param listaIdProductos
+	 *            the lista id productos
+	 * @param accion
+	 *            the accion
+	 */
+	public void hacerCaminoMasCorto(final ArrayList<Integer> listaIdProductos, final String accion) {
 		Combinador combinador;
 		ArrayList<ArrayList<Integer>> rutaDeRutas = new ArrayList<ArrayList<Integer>>();
-		
+
 		combinador = new Combinador(listaIdProductos);
-		System.out.println("Product2"+listaIdProductos);
+		System.out.println("Product2" + listaIdProductos);
 		combinador.buscarCombinaciones();
 		combinador.printCombinaciones();
 		rutaDeRutas = combinador.getCombinaciones();
-		System.out.println("RutaDeRutas"+rutaDeRutas.size());
-		
-		for (int i = 0; i < rutaDeRutas.size(); i++){
-			System.out.println("i"+i);
+		System.out.println("RutaDeRutas" + rutaDeRutas.size());
+
+		for (int i = 0; i < rutaDeRutas.size(); i++) {
+			System.out.println("i" + i);
 			distancias.add(calcularDistanciaDeCadaRuta(rutaDeRutas.get(i)));
 		}
 		System.out.println("SELECCIONAR");
 		int indice = seleccionarRutaMasCorta();
-		
+
 		realizarRuta(rutaDeRutas.get(indice), listaIdProductos, accion);
 	}
-	
-	private void realizarRuta(ArrayList<Integer> ruta, ArrayList<Integer> listaIdProductos, String accion) {
+
+	/**
+	 * Realizar ruta.
+	 *
+	 * @param ruta
+	 *            the ruta
+	 * @param listaIdProductos
+	 *            the lista id productos
+	 * @param accion
+	 *            the accion
+	 */
+	private void realizarRuta(final ArrayList<Integer> ruta, final ArrayList<Integer> listaIdProductos,
+			final String accion) {
 		System.out.println("REALIZAR");
 		campo = new Campo();
-		
-		//INICIO -> PRIMER PUNTO
+
+		// INICIO -> PRIMER PUNTO
 		espacio.origen.setCoordenadaX(1);
 		espacio.origen.setCoordenadaY(1);
 
-		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaX);
-		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaY);
-		
-		if (accion.equals("sacar")) {
-			sacarProductos(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+		espacio.destino.setCoordenadaX(estanterias.get(ruta.get(0) - 1).puntoDeRecojida.punto.coordenadaX);
+		espacio.destino.setCoordenadaY(estanterias.get(ruta.get(0) - 1).puntoDeRecojida.punto.coordenadaY);
 
-		}else if (accion.equals("colocar")) {
-			colocarProductos(estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(0)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+		if (accion.equals("sacar")) {
+			sacarProductos(estanterias.get(ruta.get(0) - 1).puntoDeRecojida.punto.coordenadaX,
+					estanterias.get(ruta.get(0) - 1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+
+		} else if (accion.equals("colocar")) {
+			colocarProductos(estanterias.get(ruta.get(0) - 1).puntoDeRecojida.punto.coordenadaX,
+					estanterias.get(ruta.get(0) - 1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
 		}
-		
+
 		Ruta rutaAux = buscarCaminoMasCorto();
 		campo.verRutaEnEspacio(rutaAux);
-		
-		// PRIMER -> HASTA ULTIMO
-		
-		for (int i = 0; i < ruta.size() - 1; i++) {
-			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i)-1).puntoDeRecojida.punto.coordenadaX);
-			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i)-1).puntoDeRecojida.punto.coordenadaY);
-			
-			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaX);
-			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaY);
-			
-			if (accion.equals("sacar")) {
-				sacarProductos(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
 
-			}else if (accion.equals("colocar")) {
-				colocarProductos(estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaX, estanterias.get(ruta.get(i+1)-1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+		// PRIMER -> HASTA ULTIMO
+
+		for (int i = 0; i < ruta.size() - 1; i++) {
+			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i) - 1).puntoDeRecojida.punto.coordenadaX);
+			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i) - 1).puntoDeRecojida.punto.coordenadaY);
+
+			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i + 1) - 1).puntoDeRecojida.punto.coordenadaX);
+			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i + 1) - 1).puntoDeRecojida.punto.coordenadaY);
+
+			if (accion.equals("sacar")) {
+				sacarProductos(estanterias.get(ruta.get(i + 1) - 1).puntoDeRecojida.punto.coordenadaX,
+						estanterias.get(ruta.get(i + 1) - 1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
+
+			} else if (accion.equals("colocar")) {
+				colocarProductos(estanterias.get(ruta.get(i + 1) - 1).puntoDeRecojida.punto.coordenadaX,
+						estanterias.get(ruta.get(i + 1) - 1).puntoDeRecojida.punto.coordenadaY, listaIdProductos);
 			}
 			rutaAux = buscarCaminoMasCorto();
 			campo.verRutaEnEspacio(rutaAux);
 		}
-		
+
 		// ULTIMO -> INICIO
-		
+
 		espacio.origen.setCoordenadaX(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaX);
 		espacio.origen.setCoordenadaY(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaY);
-		
+
 		espacio.destino.setCoordenadaX(1);
 		espacio.destino.setCoordenadaY(1);
-		
+
 		rutaAux = buscarCaminoMasCorto();
 		campo.verRutaEnEspacio(rutaAux);
-		
+
 	}
-	
-	private void colocarProductos(int x, int y, ArrayList<Integer> listaIdProductos){
-				
+
+	/**
+	 * Colocar productos.
+	 *
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
+	 * @param listaIdProductos
+	 *            the lista id productos
+	 */
+	private void colocarProductos(int x, int y, ArrayList<Integer> listaIdProductos) {
+
 		String coordenadaX = String.valueOf(x);
 		System.out.println("CoordenadaX" + coordenadaX);
 		String coordenadaY = String.valueOf(y);
 		System.out.println("CoordenadaX" + coordenadaY);
 
-		
 		String concatenado = coordenadaX + coordenadaY;
 		System.out.println("Coordenadas concatenadas -->" + concatenado);
 
@@ -143,18 +210,18 @@ public class BuscadorCaminoMasCorto {
 		case "23":
 			System.out.println("Estanteria 1");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(1)){
+				if (listaIdProductos.get(i).equals(1)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 1 removido de robot");
 				}
 			}
-			
+
 			break;
 
 		case "25":
 			System.out.println("Estanteria 2");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(2)){
+				if (listaIdProductos.get(i).equals(2)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 2 removido de robot");
 				}
@@ -162,92 +229,101 @@ public class BuscadorCaminoMasCorto {
 
 			break;
 
-			
 		case "27":
 			System.out.println("Estanteria 3");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(3)){
+				if (listaIdProductos.get(i).equals(3)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 3 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		case "43":
 			System.out.println("Estanteria 4");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(4)){
+				if (listaIdProductos.get(i).equals(4)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 4 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		case "45":
 			System.out.println("Estanteria 5");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(5)){
+				if (listaIdProductos.get(i).equals(5)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 5 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		case "47":
 			System.out.println("Estanteria 6");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(6)){
+				if (listaIdProductos.get(i).equals(6)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 6 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		case "63":
 			System.out.println("Estanteria 7");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(7)){
+				if (listaIdProductos.get(i).equals(7)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 7 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		case "65":
 			System.out.println("Estanteria 8");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(8)){
+				if (listaIdProductos.get(i).equals(8)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 8 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		case "67":
 			System.out.println("Estanteria 9");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(9)){
+				if (listaIdProductos.get(i).equals(9)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 9 removido de robot");
 				}
 			}
 
 			break;
-			
+
 		default:
 			System.out.println("No existe ese punto de recogida" + concatenado);
 			break;
 		}
 	}
-	
-	private void sacarProductos(int x, int y, ArrayList<Integer> listaIdProductos){
-		
+
+	/**
+	 * Sacar productos.
+	 *
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
+	 * @param listaIdProductos
+	 *            the lista id productos
+	 */
+	private void sacarProductos(final int x, final int y, final ArrayList<Integer> listaIdProductos) {
+
 		String coordenadaX = String.valueOf(x);
 		String coordenadaY = String.valueOf(y);
 
@@ -257,18 +333,18 @@ public class BuscadorCaminoMasCorto {
 		case "23":
 			System.out.println("Estanteria 1");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(1)){
+				if (listaIdProductos.get(i).equals(1)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 1 removido de la estanteria");
 				}
 			}
-			
+
 			break;
 
 		case "25":
 			System.out.println("Estanteria 2");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(2)){
+				if (listaIdProductos.get(i).equals(2)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 2 removido de la estanteria");
 				}
@@ -276,109 +352,120 @@ public class BuscadorCaminoMasCorto {
 
 			break;
 
-			
 		case "27":
 			System.out.println("Estanteria 3");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(3)){
+				if (listaIdProductos.get(i).equals(3)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 3 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		case "43":
 			System.out.println("Estanteria 4");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(4)){
+				if (listaIdProductos.get(i).equals(4)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 4 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		case "45":
 			System.out.println("Estanteria 5");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(5)){
+				if (listaIdProductos.get(i).equals(5)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 5 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		case "47":
 			System.out.println("Estanteria 6");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(6)){
+				if (listaIdProductos.get(i).equals(6)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 6 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		case "63":
 			System.out.println("Estanteria 7");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(7)){
+				if (listaIdProductos.get(i).equals(7)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 7 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		case "65":
 			System.out.println("Estanteria 8");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(8)){
+				if (listaIdProductos.get(i).equals(8)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 8 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		case "67":
 			System.out.println("Estanteria 9");
 			for (int i = 0; i < listaIdProductos.size(); i++) {
-				if(listaIdProductos.get(i).equals(9)){
+				if (listaIdProductos.get(i).equals(9)) {
 					listaIdProductos.remove(i);
 					System.out.println("Elemento 9 removido de la estanteria");
 				}
 			}
 
 			break;
-			
+
 		default:
 			System.out.println("No existe ese punto de recogida" + concatenado);
 			break;
 		}
 	}
 
+	/**
+	 * Seleccionar ruta mas corta.
+	 *
+	 * @return the int
+	 */
 	private int seleccionarRutaMasCorta() {
-		
+
 		int distanciaMenor = distancias.get(0);
 		int indice = 0;
-		
+
 		for (int i = 1; i < distancias.size(); i++) {
-			if(distanciaMenor > distancias.get(i)){
+			if (distanciaMenor > distancias.get(i)) {
 				distanciaMenor = distancias.get(i);
 				indice = i;
 			}
 		}
-		
+
 		return indice;
 	}
-	
-	public int calcularDistanciaDeCadaRuta(ArrayList<Integer> ruta) {
+
+	/**
+	 * Calcular distancia de cada ruta.
+	 *
+	 * @param ruta
+	 *            the ruta
+	 * @return the int
+	 */
+	public int calcularDistanciaDeCadaRuta(final ArrayList<Integer> ruta) {
 		int sumaRuta = 0;
-		
-		//INICIO -> PRIMER PUNTO
+
+		// INICIO -> PRIMER PUNTO
 		espacio.origen.setCoordenadaX(1);
 		espacio.origen.setCoordenadaY(1);
 		System.out.println("Step0");
@@ -388,32 +475,32 @@ public class BuscadorCaminoMasCorto {
 		System.out.println("Step1");
 		Ruta rutaAux = buscarCaminoMasCorto();
 		sumaRuta = sumaRuta + rutaAux.recorrido;
-		
+
 		// PRIMER -> HASTA ULTIMO
-		
+
 		for (int i = 0; i < ruta.size() - 1; i++) {
-			
+
 			espacio.origen.setCoordenadaX(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaX);
 			espacio.origen.setCoordenadaY(estanterias.get(ruta.get(i)).puntoDeRecojida.punto.coordenadaY);
-			
-			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaX);
-			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i+1)).puntoDeRecojida.punto.coordenadaY);
+
+			espacio.destino.setCoordenadaX(estanterias.get(ruta.get(i + 1)).puntoDeRecojida.punto.coordenadaX);
+			espacio.destino.setCoordenadaY(estanterias.get(ruta.get(i + 1)).puntoDeRecojida.punto.coordenadaY);
 			System.out.println("Step2");
 			rutaAux = buscarCaminoMasCorto();
 			sumaRuta = sumaRuta + rutaAux.recorrido;
 		}
-		
+
 		// ULTIMO -> INICIO
-		
+
 		espacio.origen.setCoordenadaX(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaX);
 		espacio.origen.setCoordenadaY(estanterias.get(ruta.get(ruta.size() - 1)).puntoDeRecojida.punto.coordenadaY);
-		
+
 		espacio.destino.setCoordenadaX(1);
 		espacio.destino.setCoordenadaY(1);
 		System.out.println("Step3");
 		rutaAux = buscarCaminoMasCorto();
 		sumaRuta = sumaRuta + rutaAux.recorrido;
-		
+
 		System.out.println("-----");
 
 		return sumaRuta;
