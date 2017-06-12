@@ -1,0 +1,5 @@
+projectKey=BoxMexIA
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/BoxMexIA
+ceTaskId=AVybr6VTgNHfXep44A0q
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVybr6VTgNHfXep44A0q
